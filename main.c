@@ -21,7 +21,6 @@ int main(int ac __attribute__((unused))
 	size_t len = 0;
 	char *args[2];
 	int status;
-
 	while (1)
 	{
 		pid = fork();
@@ -30,16 +29,17 @@ int main(int ac __attribute__((unused))
 			perror("fork failed");
 		} else if (pid == 0)
 		{
-			printf("($) ");
-			getline(&line, &len, stdin);
+			printf("$ ");
+			if (getline(&line, &len, stdin) == EOF)
+				kill(pid, SIGTERM);
 			line[strcspn(line, "\n")] = '\0';
 			args[0] = line, args[1] = NULL;
-			if (strlen(line) == 0)
-			{
-				break;
-			} else if (strcmp(line, "exit") == 0)
+			if (strcmp(line, "exit") == 0)
 			{
 				kill(pid, SIGTERM);
+			} else if (strlen(line) == 0)
+			{
+				break;
 			}
 			if (access(line, X_OK) == -1)
 			{
