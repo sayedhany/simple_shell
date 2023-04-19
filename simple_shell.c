@@ -1,15 +1,16 @@
-#include "main.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
 #include "main.h"
+
 /**
- * print_prompt - print the command
+ * main - program
+ * Return: 0 if success
  */
-void print_prompt(void)
+int main(void)
 {
-	printf("$ ");
-	fflush(stdout);
+	print_prompt();
+	return (0);
 }
