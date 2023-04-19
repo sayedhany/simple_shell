@@ -1,15 +1,54 @@
 #include "main.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include "main.h"
 /**
- * print_prompt - print the command
+ * main - entry point
+ *
+ * Description: 'the main file for excuting other files and
+ * tacking shell commands from stdin'
+ *
+ * @ac: arguments counter
+ * @av: arguments vector
+ * @env: envirnoment variables
+ *
+ * Return: 0 on success
  */
-void print_prompt(void)
+
+int main(int ac __attribute__((unused))
+, char *av[] __attribute__((unused)), char **env)
 {
-	printf("$ ");
-	fflush(stdout);
+	pid_t pid;
+	char *line = NULL;
+	size_t len = 0;
+	char *args[2];
+	int status;
+
+	while (1)
+	{
+		pid = fork();
+		if (pid == -1)
+		{
+			perror("fork failed");
+		} else if (pid == 0)
+		{
+			printf("($) ");
+			getline(&line, &len, stdin);
+			line[strcspn(line, "\n")] = '\0';
+			args[0] = line, args[1] = NULL;
+			if (strlen(line) == 0)
+				break;
+			if (access(line, X_OK) == -1)
+			{
+				perror("./hsh");
+				break;
+			} else if (execve(line, args, env) == -1)
+			{
+				perror("./hsh");
+			}
+		} else
+		{
+			waitpid(pid, &status, 0);
+		}
+	}
+	free(line);
+	return (0);
 }

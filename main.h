@@ -1,6 +1,10 @@
 #ifndef MAIN_H
-#define MAIN_h
-void print_prompt(void);
-int execute_command(char *command);
-void cleanup(char *command);
+#define MAIN_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
 #endif
