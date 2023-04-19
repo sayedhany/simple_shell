@@ -35,7 +35,12 @@ int main(int ac __attribute__((unused))
 			line[strcspn(line, "\n")] = '\0';
 			args[0] = line, args[1] = NULL;
 			if (strlen(line) == 0)
+			{
 				break;
+			} else if (strcmp(line, "exit") == 0)
+			{
+				kill(pid, SIGTERM);
+			}
 			if (access(line, X_OK) == -1)
 			{
 				perror("./hsh");
