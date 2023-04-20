@@ -1,59 +1,53 @@
 #include "main.h"
-#include <string.h>
+
 /**
- * main - entry point
- *
- * Description: 'the main file for excuting other files and
- * tacking shell commands from stdin'
- *
- * @ac: arguments counter
- * @av: arguments vector
- * @env: envirnoment variables
- *
- * Return: 0 on success
+ * execute_command - Executes a command in a child process.
+ * @command: the command to execute.
+ * Return: 0 on success, -1 on failute
  */
 
-int main(int ac __attribute__((unused))
-, char *av[] __attribute__((unused)), char **env)
+int execute_command(char *command)
 {
-	pid_t pid;
-	char *line = NULL;
-	size_t len = 0;
-	char *args[2];
-	int status;
-	while (1)
-	{
-		pid = fork();
-		if (pid == -1)
-		{
-			perror("fork failed");
-		} else if (pid == 0)
-		{
-			printf("$ ");
-			if (getline(&line, &len, stdin) == EOF)
-				kill(pid, SIGTERM);
-			line[strcspn(line, "\n")] = '\0';
-			args[0] = line, args[1] = NULL;
-			if (strcmp(line, "exit") == 0)
-			{
-				kill(pid, SIGTERM);
-			} else if (strlen(line) == 0)
-			{
-				break;
-			}
-			if (access(line, X_OK) == -1)
-			{
-				perror("./hsh");
-				break;
-			} else if (execve(line, args, env) == -1)
-			{
-				perror("./hsh");
-			}
-		} else
-		{
-			waitpid(pid, &status, 0);
-		}
-	}
-	free(line);
-	return (0);
+    pid_t child_pid;
+    int status;
+
+    child_pid = fork();
+    if (child_pid == -1)
+    {
+        perror("fork");
+        return (-1);
+    }
+    if (child_pid == 0)
+    {
+        /* Child process */
+        if (execl(command, command, NULL) == -1)
+        {
+            perror("./hsh");
+            exit(EXIT_FAILURE);
+        }
+    }
+    else
+    {
+        /* Parent process */
+        waitpid(child_pid, &status, 0);
+        if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
+        {
+            return (0);
+        }
+        else
+        {
+            
+            return (-1);
+        }
+    }
+    return (-1);
+}
+
+/**
+ * print_prompt - print >
+ */
+void print_prompt(void)
+{
+	printf("$ ");
+	fflush(stdout);
 }
