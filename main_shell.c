@@ -1,25 +1,37 @@
 #include "main.h"
 
-#define BUFSIZE 1024
 /**
  * main - the main function for simple shell
  * Return: 0
  */
 int main(void)
 {
-	char *command = NULL;
-	size_t bufsize = BUFSIZE;
+	char *command = NULL, **args = NULL;
+	ssize_t read = 0;
+	size_t len = 0;
 
 	while (1)
 	{
 		print_prompt();
-		getline(&command, &bufsize, stdin);
-		command[strlen(command) - 1] = '\0';
 
-		if (strcmp(command, "exit") == 0)
-			exit(EXIT_SUCCESS);
-		if (execute_command(command) == -1)
-			printf("./hsh");
+		read = getline(&command, &len, stdin);
+
+		if (read == -1)
+		{
+			putchar('\n');
+			break;
+		}
+		if (command[read - 1] == '\n')
+			command[read - 1] = '\0';
+
+		args = tokenize(command);
+
+		execute_command(args);
+
+		free(args);
+		args = NULL;
+		free(command);
+		command = NULL;
 	}
 	return (0);
 }
