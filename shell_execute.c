@@ -1,31 +1,53 @@
 #include "main.h"
 /**
- * execute_command - execute command with arguments
- * @args: arguments for command
+ * execute_command - Executes the command given as input.
+ * @args: An array of strings containing the command and its arguments.
+ * Return: 1 on success, -1 on failure.
  */
-void execute_command(char **args)
+int execute_command(char **args)
 {
 	pid_t pid;
-	int status;
+	char *path = NULL;
+	struct stat st;
+
+	if (args == NULL || args[0] == NULL)
+		return (-1);
+
+	path = _getpath(args[0]);
+
+	if (path == NULL)
+	{
+		print_error(args[0], "not found");
+		return (-1);
+	}
+
+	if (stat(path, &st) == -1)
+	{
+		free(path);
+		print_error(args[0], "not found");
+		return (-1);
+	}
 
 	pid = fork();
+
 	if (pid == -1)
 	{
-		perror("Fork faild");
-		exit(EXIT_FAILURE);
+		free(path);
+		perror("Error");
+		return (-1);
 	}
 	else if (pid == 0)
 	{
-		if (execve(args[0], args, NULL) == -1)
+		if (execve(path, args, environ) == -1)
 		{
-			perror("./hsh");
+			free(path);
+			perror("Error");
 			exit(EXIT_FAILURE);
 		}
 	}
 	else
-	{
-		do {
-			waitpid(pid, &status, WUNTRACED);
-		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
-	}
+		wait(NULL);
+
+	free(path);
+	return (1);
 }
