@@ -2,7 +2,7 @@
 
 /**
  * main - the main function for simple shell
- * Return: 0
+ * Return: 0 in success
  */
 int main(void)
 {
