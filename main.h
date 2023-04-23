@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+/* functions prototypes */
 void execute_command(char **args);
 void print_prompt(void);
 char **tokenize(char *command);
