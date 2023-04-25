@@ -1,4 +1,4 @@
-#include "maim.h"
+#include "main.h"
 
 char *_strchr(const char *s, int c);
 size_t _strspn(const char *s1, const char *s2);
