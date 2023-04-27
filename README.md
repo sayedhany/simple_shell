@@ -5,7 +5,6 @@ this project is a task provided by alx africa
 # How to use?
 type in your cmd
 `$ ./hsh`
-
 # functions used
 1. access
 1. execve
@@ -20,3 +19,12 @@ type in your cmd
 1. fork
 1. waitpid
 
+# what commands can you try for now?
+1. most bash shell commands that ends with /bin/the command
+1. exit
+1. clear
+1. ls
+1. commands with arguments are also includes
+
+# recommendation
+take a tour around this project and try to implement it in your own way to test your own potenrials
