@@ -1,7 +1,10 @@
-0x16-simple-shell
+# what is this project about?
+a basic implementation of the shell using knowledge of c programming language, shell script and shell behaviors
+this project is a task provided by alx africa
 
 # How to use?
-type ./hsh in your cmd
+type in your cmd
+`$ ./hsh`
 
 # functions used
 1. access
